@@ -5,19 +5,33 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	Action accion = actRUN;//actIDLE es para que no se mueva, actWALK para
+	Action accion = actWALK;//actIDLE es para que no se mueva, actWALK para
 				//moverse, actRUN para que corra 
+	int a;
 
+	switch (last_action)
+	{
+	case actWALK:
+		//actualizacion en caso de avanzar, la brujula se queda igual
+		break;
+	case actRUN:
+		//actualizacion en caso de avanzar, la brujula se queda igual
+		break;
+	case actTURN_L:
+		a = current_state.brujula;
+		a = (a+6)%8;
+		current_state.brujula = static_cast<Orientacion>(a); //giramos la camara a izquierda
 
-	switch(last_action){
-		case actTURN_SR:
-			brujula = static_cast<Orientacion>((brujula+1)%8);
-			break;
+		break;
+	case actTURN_SR:
+		a = current_state.brujula;
+		a = (a+1)%8;
+		current_state.brujula = static_cast<Orientacion>(a);
 
-		
-
+		break;
 
 	}
+
 
 
 	// Mostrar el valor de los sensores
