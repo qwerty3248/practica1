@@ -5,7 +5,20 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	Action accion = actIDLE;
+	Action accion = actRUN;//actIDLE es para que no se mueva, actWALK para
+				//moverse, actRUN para que corra 
+
+
+	switch(last_action){
+		case actTURN_SR:
+			brujula = static_cast<Orientacion>((brujula+1)%8);
+			break;
+
+		
+
+
+	}
+
 
 	// Mostrar el valor de los sensores
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
