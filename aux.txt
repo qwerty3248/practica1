@@ -1,0 +1,3 @@
+Una vez tengas los repositiorios enlazados, lo único que debes hacer para aplicar posibles cambios en el repositorio de la asignatura en tu repositorio (cambios de upstream en origin) es: git pull upstream main
+
+Si quieres que esos cambios también se guarden en github, a continuación ejecuta: git push origin main
