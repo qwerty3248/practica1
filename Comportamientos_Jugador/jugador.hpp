@@ -20,6 +20,8 @@ class ComportamientoJugador : public Comportamiento{
       current_state.fil=99;
       current_state.col=99;
       current_state.brujula=norte;
+      girar_derecha=false;
+      bien_situado = false;
 
     }
 
@@ -34,5 +36,6 @@ class ComportamientoJugador : public Comportamiento{
   state current_state; 
   Orientacion brujula;
   Action last_action;
+  bool girar_derecha, bien_situado;
 };
 #endif
