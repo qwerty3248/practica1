@@ -101,7 +101,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	case actTURN_L:
 		a = current_state.brujula;
 		a = (a+6)%8;
-		current_state.brujula = static_cast<Orientacion>(a); //giramos la camara a izquierda
+		current_state.brujula = static_cast<Orientacion>(a); 
 
 		break;
 	case actTURN_SR:
@@ -113,7 +113,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	if (sensores.terreno[0] == 'G' and !bien_situado){
+	if (/*sensores.terreno[0] == 'G'*/sensores.posF!=-1 and !bien_situado){
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
