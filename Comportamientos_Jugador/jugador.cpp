@@ -15,7 +15,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	Action accion = actWALK;//actIDLE es para que no se mueva, actWALK para
+	Action accion = actIDLE;//actIDLE es para que no se mueva, actWALK para
 				//moverse, actRUN para que corra 
 	int a;
 
@@ -113,7 +113,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	if (/*sensores.terreno[0] == 'G'*/sensores.posF!=-1 and !bien_situado){
+	if (sensores.terreno[0] == 'G' and !bien_situado){
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
