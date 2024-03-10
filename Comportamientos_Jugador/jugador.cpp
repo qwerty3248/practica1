@@ -325,10 +325,6 @@ Action ComportamientoJugador::think(Sensores sensores)
 	state last_state = current_state;
 
 	
-
-	
-
-	
 	return accion;
 	
 	
