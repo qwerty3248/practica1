@@ -1,0 +1,6 @@
+Poner el movimiento más aleatorio
+Que recargue bateria al maximo o hasta un valor si está en una pos de carga
+Que no use ni el bosque ni el agua si no tiene zapatos o zapatillas
+Se puede poner el barranco desbloqueado ya ?? 
+Mirar como poder ir hacia una casilla en concreto
+
