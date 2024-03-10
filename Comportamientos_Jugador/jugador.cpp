@@ -159,7 +159,18 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 
 
 }
+Action BuscarCasillaInteres(Sensores sensores){
+	Action  accion = actIDLE;
+	//prioridades a la hora de buscar casilla 
+	return accion;
 
+}
+Action RealizarAccion(Sensores sensores){
+	Action accion=actIDLE;
+
+	return accion;
+	
+}
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
@@ -290,7 +301,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	if (sensores.terreno[0] == 'G' and !bien_situado){ //Orientacion
+	if ((sensores.terreno[0] == 'G' or sensores.posF != -1) and !bien_situado){ //Orientacion
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
@@ -301,8 +312,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	if (bien_situado){
 		PonerTerrenoEnMatriz(sensores.terreno,current_state,mapaResultado);
-		//visitados[current_state.fil][current_state.col]=true;
-		//bien_situado = false;
+
 	}
 
 	//Decidir nueva accion
@@ -320,9 +330,10 @@ Action ComportamientoJugador::think(Sensores sensores)
 		girar_derecha = (rand()%2==0);
 
 	}
+	
 
+	//accion = RealizarAccion(sensores);
 	last_action=accion;
-	state last_state = current_state;
 
 	
 	return accion;

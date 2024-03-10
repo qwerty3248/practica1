@@ -22,24 +22,13 @@ class ComportamientoJugador : public Comportamiento{
       current_state.fil=MAX;
       current_state.col=MAX;
       current_state.brujula=norte;
-      girar_derecha=true;
-      girar_45_grados = true;
+      girar_derecha=false;
       bien_situado = false;
       bikini=false;
       zapatillas=false;
-      //visitados = {false};
       numGiros = 0;
-      tamanioMapa = size;
       last_action = actIDLE;
-      contador_visitados_otra = 0;
-      /*for (int i = 0;i < 3 ; i++){
-        for (int j = 0; j < tamanioMapa; j++ ){
-          mapaResultado[i][j] = 'P';
-          mapaResultado[tamanioMapa-i-1][j] = 'P';
-          mapaResultado[j][i] = 'P';
-          mapaResultado[j][tamanioMapa-i-1] = 'P';
-        }
-      }*/
+      
       
 
     }
@@ -55,15 +44,13 @@ class ComportamientoJugador : public Comportamiento{
   state current_state; 
   //Orientacion brujula;
   Action last_action;
-  bool girar_derecha, bien_situado,bikini,zapatillas,recargando,girar_45_grados;
+  bool girar_derecha, bien_situado,bikini,zapatillas,recargando;
   //bool visitados[MAX+1][MAX+1];
   int contador_visitados_otra;
   const int bateria_baja = 2000;
   const int bateria_muy_baja = 500;
   const int bateriaRecarga = 4500;
   const int vidaBaja = 1000;
-  const int factorVidaBateria = 3;
   int numGiros;
-  int tamanioMapa;
 };
 #endif
