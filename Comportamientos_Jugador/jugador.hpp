@@ -47,10 +47,10 @@ class ComportamientoJugador : public Comportamiento{
   bool girar_derecha, bien_situado,bikini,zapatillas,recargando;
   //bool visitados[MAX+1][MAX+1];
   int contador_visitados_otra;
-  const int bateria_baja = 2000;
-  const int bateria_muy_baja = 500;
-  const int bateriaRecarga = 4500;
-  const int vidaBaja = 1000;
+  const int BATERIA_BAJA = 2000;
+  const int BATERIA_MINIMA = 500;
+  const int BATERIA_A_RECARGAR = 4500;
+  const int POCOS_CICLOS = 1200;
   int numGiros;
 };
 #endif

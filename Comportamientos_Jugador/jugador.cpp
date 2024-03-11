@@ -4,8 +4,6 @@
 #include <queue>
 using namespace std;
 
-//bool visitados [100][100] = {false};
-//queue<pair<int,pair<int,char>>> pos_visitadas;
 
 void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,vector< vector<unsigned char>> &matriz){
 
@@ -24,7 +22,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-2][st.col-2] = terreno[4];
 			matriz[st.fil-2][st.col-1] = terreno[5];
 			matriz[st.fil-2][st.col] = terreno[6];
-			matriz[st.fil-2][st.col-1] = terreno[7];
+			matriz[st.fil-2][st.col+1] = terreno[7];
 			matriz[st.fil-2][st.col+2] = terreno[8];
 			matriz[st.fil-3][st.col-3] = terreno[9];
 			matriz[st.fil-3][st.col-2] = terreno[10];
@@ -63,7 +61,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil+2][st.col+2] = terreno[8];
 			matriz[st.fil-3][st.col+3] = terreno[9];
 			matriz[st.fil-2][st.col+3] = terreno[10];
-			matriz[st.fil-1][st.col-3] = terreno[11];
+			matriz[st.fil-1][st.col+3] = terreno[11];
 			matriz[st.fil][st.col+3] = terreno[12];
 			matriz[st.fil+1][st.col+3] = terreno[13];
 			matriz[st.fil+2][st.col+3] = terreno[14];
@@ -151,7 +149,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil+3][st.col-2] = terreno[11];
 			matriz[st.fil+3][st.col-3] = terreno[12];
 			matriz[st.fil+2][st.col-3] = terreno[13];
-			matriz[st.fil][st.col-3] = terreno[14];
+			matriz[st.fil+1][st.col-3] = terreno[14];
 			matriz[st.fil][st.col-3] = terreno[15];
 			break;
 
@@ -159,14 +157,182 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 
 
 }
-Action BuscarCasillaInteres(Sensores sensores){
+Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS){
 	Action  accion = actIDLE;
-	//prioridades a la hora de buscar casilla 
+	//prioridades a la hora de buscar casilla  de la mas a la menos prioritaria
+	bool encontre_casilla_interes = false, peligro = false;
+	//int aleat_giro; esto no se va a usar
+	int pos_casilla_a_ir =  -1; //a -1 porque  es el unico valor que ya no esta dentro del rango del sensor
+	bool frente = (pos_casilla_a_ir == 2) || (pos_casilla_a_ir == 6) || (pos_casilla_a_ir == 12) || (pos_casilla_a_ir == 7) || (pos_casilla_a_ir == 5) || (pos_casilla_a_ir == 10) || (pos_casilla_a_ir == 11) || (pos_casilla_a_ir == 14) || (pos_casilla_a_ir == 13);
+	bool derecha = (pos_casilla_a_ir == 3) || (pos_casilla_a_ir == 8) || (pos_casilla_a_ir == 15);
+	bool izquierda = (pos_casilla_a_ir == 1) || (pos_casilla_a_ir == 9) || (pos_casilla_a_ir == 4);
+
+	//Si estamos al limite de bateria y NO nos quedan pocos ciclos pues buscamos una casilla de recarga
+	if (sensores.bateria <= BATERIA_MINIMA && !(sensores.vida < POCOS_CICLOS)){
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'X'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}
+	//Zapatillas 
+	if (!zapatillas && !encontre_casilla_interes){
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'D'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}
+
+	//Bikini
+	if (!bikini && !encontre_casilla_interes){
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'K'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}
+	//Situarse corerctamente, G
+	if (!bien_situado && !encontre_casilla_interes){
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'G'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}
+
+	//Si tenemos la bateria baja
+	if (sensores.bateria < BATERIA_BAJA && !encontre_casilla_interes && !(sensores.vida <  POCOS_CICLOS)) {
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'X'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}
+
+	//Si no tenemos los items de bikini o zapatillas buscar una casilla que gaste menos ya que gasta mucha energia
+	if ((!zapatillas && sensores.terreno[0] == 'B') || (!bikini && sensores.terreno[0] == 'A') && !encontre_casilla_interes) {
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
+			if (sensores.terreno[i] == 'S' || sensores.terreno[i] == 'T'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+			}
+		}
+	}	
+	//Le daremos más prioridad porque no quiero que robotin muera =(
+	//Si podemos porque tenemos bateria suficiente y tenemos los sensores activados, las esquivamos para que no nos maten y perder los sensores activados
+	if (bien_situado && (sensores.vida > BATERIA_BAJA)) {
+		for (int i = 0; i < sensores.terreno.size() && !peligro; i++){
+			if (sensores.terreno[i] == 'l' || sensores.terreno[i] == 'a'){
+				pos_casilla_a_ir = i;
+				encontre_casilla_interes=true;
+				peligro = true;
+			}
+		}
+	}	
+
+	//Si llegamos a encontrar una casilla de interes vemos que accion deseada hacer para llegar a ella 
+	if (encontre_casilla_interes){
+		//Ahora hay que ver por los sensores donde esta, si hay que girar a la derecha a la izquierda o hacia el frente
+		if (frente){
+			//Si hay peligro giramos para no morir
+			if (peligro){
+				if (girar_derecha){
+					accion = actTURN_SR;
+					girar_derecha = (rand()%2 == 0);
+				}else{
+					accion = actTURN_L;
+					girar_derecha = (rand()%2 == 0);
+				}
+			}else{
+				accion = actWALK;//Si no hay peligro podemos avanzar
+			}
+
+		}else if (derecha){
+			if (peligro){
+				accion = actTURN_L;
+			}else{
+				accion = actTURN_SR;//Si no hay peligro hacemos la accion correspondiente
+			}			
+
+		}else if (izquierda){
+			if (peligro) {
+				accion = actTURN_SR;
+			}else{
+				accion = actTURN_L;//Lo mismo aqui
+			}
+
+		}
+
+
+	}
+
+
 	return accion;
 
 }
-Action RealizarAccion(Sensores sensores){
+Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS, const int BATERIA_A_RECARGAR,int &numGiros){
 	Action accion=actIDLE;
+	//Cuando voy a avanzar, puede ir cambiando si consigo items por ejemplo, el bikini o las zapatillas
+	bool avanzo_si = sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S';
+	//Condicion que debe cumplirse siempre, que no haya colision, ni un muro ni un precipicio
+	bool siempre_cumplir = (!sensores.colision) && sensores.terreno[2] != 'M' && sensores.terreno[2] != 'P' ;
+	//Si tenemos poca bateria y estamos en una casilla de carga nos quedaremos en ella
+	if ((sensores.terreno[0] == 'X') && ((sensores.bateria < BATERIA_BAJA) or (sensores.bateria+10 < BATERIA_A_RECARGAR))){//El +10 es lo que recarga 
+		return accion; //Nos quedamos en el sitio si estamos en la x y tenemos la bateria baja o no hemos recargado lo suficiente
+	}
+	//Tenemos algun movimiento de interes ??
+	accion = BuscarCasillaInteres(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS);
+	if (accion != actIDLE){
+		if (accion == actWALK){
+			if (siempre_cumplir){
+				return accion;//Si cumple lo fundamental entonces va hacia delante
+			}
+		}else{
+			return accion;//Si no es andar hacia delante, gira que es posible siempre
+		}
+	}
+
+	if (sensores.bateria > BATERIA_MINIMA){
+		if (bikini){
+			avanzo_si = avanzo_si || sensores.terreno[2] == 'A'; //Ahora podre caminar por agua sin que gaste mucha energia
+		}
+	}
+
+	//Repetimos lo mismo para las zapatillas
+	if (sensores.bateria > BATERIA_MINIMA){
+		if (zapatillas){
+			avanzo_si = avanzo_si || sensores.terreno[2] == 'B'; //Ahora podre caminar por bosque sin que gaste mucha energia
+		}
+	}
+
+	//Ahora vamos por si entramos a una casa
+	if (numGiros > 30 ){ // si hemos girado más de 50 seguro que estamos atrapadados en una casa o en un sitio sin items lleno de agua o de bosque
+		avanzo_si = avanzo_si || sensores.terreno[2] == 'B' ||  sensores.terreno[2] == 'A';
+	}
+
+	//una vez que tenemos la posible condicion de avanzar y la elemental que es que no sea ni pared ni precipicio ni colision y no haya ningun agente delante
+	if (avanzo_si && siempre_cumplir){
+		accion = actWALK; //Vamos hacia adelante
+		if (numGiros >= 0){//Evitar negativo
+			numGiros--;//Cuando avanzemos  decrementamos los giros disponibles
+		}// si giramos mucho puede que estemos en un sitio cerrado o no tengamos items
+	}else{//Si no se puede giramos aleatoriamente y actualizamos girar_derecha
+		if (girar_derecha){
+			accion = actTURN_SR;
+			girar_derecha = (rand()%2 == 0);
+		}else{
+			accion = actTURN_L;
+			girar_derecha = (rand()%2 == 0);
+		}
+		numGiros++;//SI hemos girado da igual para donde incrementamos 1 los giros
+	}
+
 
 	return accion;
 	
@@ -174,9 +340,18 @@ Action RealizarAccion(Sensores sensores){
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	
+
+
 	Action accion = actIDLE;//actIDLE es para que no se mueva, actWALK para
 				//moverse, actRUN para que corra
+
+	if (sensores.reset){
+		bikini=false;
+		zapatillas=false;
+		current_state.brujula=norte;
+		bien_situado=false;
+	}
+
 	int a;
 	// Mostrar el valor de los sensores
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
@@ -251,35 +426,35 @@ Action ComportamientoJugador::think(Sensores sensores)
 		switch (current_state.brujula)
 		{
 		case norte:
-			current_state.fil--;
+			current_state.fil-=2;
 			break;
 
 		case noroeste:
-			current_state.col++; current_state.fil--;
+			current_state.col+=2; current_state.fil-=2;
 			break;
 
 		case este:
-			current_state.col++;
+			current_state.col+=2;
 			break;
 
 		case sureste:
-			current_state.col++; current_state.fil++;
+			current_state.col+=2; current_state.fil+=2;
 			break;
 
 		case sur:
-			current_state.fil++;
+			current_state.fil+=2;
 			break;
 
 		case suroeste:
-			current_state.col--; current_state.fil++;
+			current_state.col-=2; current_state.fil+=2;
 			break;
 
 		case oeste:
-			current_state.col--;
+			current_state.col-=2;
 			break;
 
 		case noreste:
-			current_state.col--; current_state.fil--;
+			current_state.col-=2; current_state.fil-=2;
 			break;
 
 		}
@@ -301,7 +476,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	if ((sensores.terreno[0] == 'G' or sensores.posF != -1) and !bien_situado){ //Orientacion
+	if ((sensores.terreno[0] == 'G' /*or sensores.posF != -1*/) and !bien_situado){ //Orientacion
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
@@ -314,7 +489,14 @@ Action ComportamientoJugador::think(Sensores sensores)
 		PonerTerrenoEnMatriz(sensores.terreno,current_state,mapaResultado);
 
 	}
-
+	
+	if (sensores.terreno[0] == 'D'){
+		zapatillas = true;
+	}
+	
+	if (sensores.terreno[0] == 'K'){
+		bikini = true;
+	}
 	//Decidir nueva accion
 	if ((sensores.terreno[2] == 'T' or sensores.terreno[2] == 'S' or sensores.terreno[2] == 'G' or 	sensores.terreno[2] == 'A' or sensores.terreno[2] == 'K' or sensores.terreno[2] == 'D' or sensores.terreno[2] == 'X' or sensores.terreno[2] == 'B') and sensores.agentes[2] == '_')
 
@@ -330,9 +512,18 @@ Action ComportamientoJugador::think(Sensores sensores)
 		girar_derecha = (rand()%2==0);
 
 	}
-	
 
-	//accion = RealizarAccion(sensores);
+
+
+	//accion = RealizarAccion(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,BATERIA_A_RECARGAR,numGiros);
+	/*if (accion == actWALK){
+		if (numGiros >= 0){
+			numGiros--;
+		}
+	}else{
+		numGiros++;
+		girar_derecha = (rand()%2 == 0);
+	}*/
 	last_action=accion;
 
 	
