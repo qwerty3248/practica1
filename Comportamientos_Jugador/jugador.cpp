@@ -29,7 +29,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-3][st.col-1] = terreno[11];
 			matriz[st.fil-3][st.col] = terreno[12];
 			matriz[st.fil-3][st.col+1] = terreno[13];
-			matriz[st.fil-3][st.col-2] = terreno[14];
+			matriz[st.fil-3][st.col+2] = terreno[14];
 			matriz[st.fil-3][st.col+3] = terreno[15];
 			break;
 
@@ -226,7 +226,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 	}	
 	//Le daremos más prioridad porque no quiero que robotin muera =(
 	//Si podemos porque tenemos bateria suficiente y tenemos los sensores activados, las esquivamos para que no nos maten y perder los sensores activados
-	if (bien_situado && (sensores.vida > BATERIA_BAJA)) {
+	if (bien_situado && (sensores.bateria > BATERIA_BAJA)) {
 		for (int i = 0; i < sensores.terreno.size() && !peligro; i++){
 			if (sensores.terreno[i] == 'l' || sensores.terreno[i] == 'a'){
 				pos_casilla_a_ir = i;
