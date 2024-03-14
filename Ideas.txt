@@ -1,0 +1,6 @@
+Por si tengo que cambiar el movimiento.
+Hacerlo con memoria:
+-Puedo intentar crear un mapa auxiliar e ir marcando si ha estado o no
+-Puedo tambien crear una estructura auxiliar para representar donde ha estado.
+-Puedo hacer que tenga en cuenta el movimiento anterior para hacer el siguiente.
+-Puedo aplicar el potencial de teoria para buscar el objetivo.

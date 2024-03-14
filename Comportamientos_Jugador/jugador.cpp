@@ -156,6 +156,9 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 	}
 
 
+
+
+
 }
 Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS){
 	Action  accion = actIDLE;
@@ -163,10 +166,9 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 	bool encontre_casilla_interes = false, peligro = false;
 	//int aleat_giro; esto no se va a usar
 	int pos_casilla_a_ir =  -1; //a -1 porque  es el unico valor que ya no esta dentro del rango del sensor
-	bool frente = (pos_casilla_a_ir == 2) || (pos_casilla_a_ir == 6) || (pos_casilla_a_ir == 12) || (pos_casilla_a_ir == 7) || (pos_casilla_a_ir == 5) || (pos_casilla_a_ir == 10) || (pos_casilla_a_ir == 11) || (pos_casilla_a_ir == 14) || (pos_casilla_a_ir == 13);
-	bool derecha = (pos_casilla_a_ir == 3) || (pos_casilla_a_ir == 8) || (pos_casilla_a_ir == 15);
-	bool izquierda = (pos_casilla_a_ir == 1) || (pos_casilla_a_ir == 9) || (pos_casilla_a_ir == 4);
-
+	//bool frente = (pos_casilla_a_ir == 2) || (pos_casilla_a_ir == 6) || (pos_casilla_a_ir == 12) || (pos_casilla_a_ir == 7) || (pos_casilla_a_ir == 5) || (pos_casilla_a_ir == 10) || (pos_casilla_a_ir == 11) || (pos_casilla_a_ir == 14) || (pos_casilla_a_ir == 13);
+	//bool derecha = (pos_casilla_a_ir == 3) || (pos_casilla_a_ir == 8) || (pos_casilla_a_ir == 15);
+	//bool izquierda = (pos_casilla_a_ir == 1) || (pos_casilla_a_ir == 9) || (pos_casilla_a_ir == 4);
 	//Si estamos al limite de bateria y NO nos quedan pocos ciclos pues buscamos una casilla de recarga
 	if (sensores.bateria <= BATERIA_MINIMA && !(sensores.vida < POCOS_CICLOS)){
 		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
@@ -182,6 +184,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 			if (sensores.terreno[i] == 'D'){
 				pos_casilla_a_ir = i;
 				encontre_casilla_interes=true;
+				//cout<<"Encontre casilla zapas en "<<i<<endl;
 			}
 		}
 	}
@@ -192,6 +195,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 			if (sensores.terreno[i] == 'K'){
 				pos_casilla_a_ir = i;
 				encontre_casilla_interes=true;
+				//cout<<"Encontre casilla bikini en "<<i<<endl;
 			}
 		}
 	}
@@ -201,7 +205,9 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 			if (sensores.terreno[i] == 'G'){
 				pos_casilla_a_ir = i;
 				encontre_casilla_interes=true;
+				//cout<<"Encontre casilla interes G en "<<i<<endl;
 			}
+			cout << sensores.terreno[i]<<endl;
 		}
 	}
 
@@ -227,7 +233,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 	//Le daremos más prioridad porque no quiero que robotin muera =(
 	//Si podemos porque tenemos bateria suficiente y tenemos los sensores activados, las esquivamos para que no nos maten y perder los sensores activados
 	if (bien_situado && (sensores.bateria > BATERIA_BAJA)) {
-		for (int i = 0; i < sensores.terreno.size() && !peligro; i++){
+		for (int i = 0; i < sensores.terreno.size() && !encontre_casilla_interes; i++){
 			if (sensores.terreno[i] == 'l' || sensores.terreno[i] == 'a'){
 				pos_casilla_a_ir = i;
 				encontre_casilla_interes=true;
@@ -239,9 +245,12 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 	//Si llegamos a encontrar una casilla de interes vemos que accion deseada hacer para llegar a ella 
 	if (encontre_casilla_interes){
 		//Ahora hay que ver por los sensores donde esta, si hay que girar a la derecha a la izquierda o hacia el frente
-		if (frente){
+		//cout << "Encontre esta a true "<<endl;
+		if ((pos_casilla_a_ir == 2) || (pos_casilla_a_ir == 6) || (pos_casilla_a_ir == 12) || (pos_casilla_a_ir == 7) || (pos_casilla_a_ir == 5) || (pos_casilla_a_ir == 10) || (pos_casilla_a_ir == 11) || (pos_casilla_a_ir == 14) || (pos_casilla_a_ir == 13)){
 			//Si hay peligro giramos para no morir
+			//cout << "Pa lante"<<endl;
 			if (peligro){
+				//cout << "Peligro"<<endl;
 				if (girar_derecha){
 					accion = actTURN_SR;
 					girar_derecha = (rand()%2 == 0);
@@ -253,14 +262,16 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 				accion = actWALK;//Si no hay peligro podemos avanzar
 			}
 
-		}else if (derecha){
+		}else if ((pos_casilla_a_ir == 3) || (pos_casilla_a_ir == 8) || (pos_casilla_a_ir == 15)){
+			//cout << "Derecha "<<endl;
 			if (peligro){
 				accion = actTURN_L;
 			}else{
 				accion = actTURN_SR;//Si no hay peligro hacemos la accion correspondiente
 			}			
 
-		}else if (izquierda){
+		}else if ((pos_casilla_a_ir == 1) || (pos_casilla_a_ir == 9) || (pos_casilla_a_ir == 4)){
+			//cout << "Izquierda "<<endl;
 			if (peligro) {
 				accion = actTURN_SR;
 			}else{
@@ -271,6 +282,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 
 
 	}
+	//cout << accion<<endl;
 
 
 	return accion;
@@ -288,6 +300,7 @@ Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,
 	}
 	//Tenemos algun movimiento de interes ??
 	accion = BuscarCasillaInteres(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS);
+	//cout << accion<<endl;
 	if (accion != actIDLE){
 		if (accion == actWALK){
 			if (siempre_cumplir){
@@ -332,7 +345,6 @@ Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,
 		}
 		numGiros++;//SI hemos girado da igual para donde incrementamos 1 los giros
 	}
-
 
 	return accion;
 	
@@ -498,7 +510,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		bikini = true;
 	}
 	//Decidir nueva accion
-	if ((sensores.terreno[2] == 'T' or sensores.terreno[2] == 'S' or sensores.terreno[2] == 'G' or 	sensores.terreno[2] == 'A' or sensores.terreno[2] == 'K' or sensores.terreno[2] == 'D' or sensores.terreno[2] == 'X' or sensores.terreno[2] == 'B') and sensores.agentes[2] == '_')
+	/*if ((sensores.terreno[2] == 'T' or sensores.terreno[2] == 'S' or sensores.terreno[2] == 'G' or 	sensores.terreno[2] == 'A' or sensores.terreno[2] == 'K' or sensores.terreno[2] == 'D' or sensores.terreno[2] == 'X' or sensores.terreno[2] == 'B') and sensores.agentes[2] == '_')
 
 	{
 		accion = actWALK;
@@ -511,11 +523,11 @@ Action ComportamientoJugador::think(Sensores sensores)
 		accion = actTURN_SR;
 		girar_derecha = (rand()%2==0);
 
-	}
+	}*/
 
 
 
-	//accion = RealizarAccion(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,BATERIA_A_RECARGAR,numGiros);
+	accion = RealizarAccion(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,BATERIA_A_RECARGAR,numGiros);
 	/*if (accion == actWALK){
 		if (numGiros >= 0){
 			numGiros--;
@@ -525,6 +537,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		girar_derecha = (rand()%2 == 0);
 	}*/
 	last_action=accion;
+	//cout <<accion<<endl;
 
 	
 	return accion;
