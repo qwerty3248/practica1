@@ -2,18 +2,29 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+//#include <cmath>
 using namespace std;
+
+/*
+#define PI 3.1415926535
+inline int rotar_fil(const int & fil, const int & col , float a) {
+	return -round(col*sin(a)-fil*cos(a));
+}
+inline int rotar_col(const int & fil, const int & col , float a) {
+	return round(col*cos(a)+fil*sin(a));
+}*/
+
 
 
 void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,vector< vector<unsigned char>> &matriz){
-
+	
 	//Por ahora la pondra solo la de componente a 0 pero pondra todas las componentes del terreno en funcion de la 
 	//orientacion del agente
 	matriz[st.fil][st.col] = terreno[0];
 
 	//aqui vamos a poner la como se llena dependiendo de la orientacion
 
-	 switch(st.brujula){
+	switch(st.brujula){
 
 		case norte:
 			matriz[st.fil-1][st.col-1] = terreno[1];
@@ -102,6 +113,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil][st.col+3] = terreno[15];
 			break;
 		case noroeste:
+			
 			matriz[st.fil][st.col-1] = terreno[1];
 			matriz[st.fil-1][st.col-1] = terreno[2];
 			matriz[st.fil-1][st.col] = terreno[3];
@@ -118,6 +130,8 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-3][st.col-1] = terreno[14];
 			matriz[st.fil-3][st.col] = terreno[15];
 			break;
+			
+			
 		case sureste:
 			matriz[st.fil][st.col+1] = terreno[1];
 			matriz[st.fil+1][st.col+1] = terreno[2];
@@ -153,11 +167,34 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil][st.col-3] = terreno[15];
 			break;
 
+
 	}
+	/*
+	if (st.brujula%2){
+		int n = 0;
+		for (int i = 0; i >-4 ;i--){
+			int fil = i, nextfil = i;
+			int col = 0, nextcol = 0;
+			while (fil <= 0)
+			{
+				if (col == -i){
+					nextfil++;
+				}else if (fil == i){
+					nextcol++;
+				}
+				int nfil = st.fil+rotar_fil(fil,col,-PI/4*(st.brujula-1));
+				int ncol = st.col+rotar_col(fil,col,-PI/4*(st.brujula-1));
 
-
-
-
+				if (0 < nfil && nfil < matriz.size() && 0 <= ncol && ncol < matriz[0].size()){
+					matriz[nfil][ncol]=terreno[n];
+				}
+				fil = nextfil;
+				col = nextcol;
+				n++;
+			}
+			
+		}
+	}*/
 
 }
 Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS){
@@ -207,7 +244,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 				encontre_casilla_interes=true;
 				//cout<<"Encontre casilla interes G en "<<i<<endl;
 			}
-			cout << sensores.terreno[i]<<endl;
+			//cout << sensores.terreno[i]<<endl;
 		}
 	}
 
@@ -313,14 +350,14 @@ Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,
 
 	if (sensores.bateria > BATERIA_MINIMA){
 		if (bikini){
-			avanzo_si = avanzo_si || sensores.terreno[2] == 'A'; //Ahora podre caminar por agua sin que gaste mucha energia
+			avanzo_si = avanzo_si || sensores.terreno[2] == 'A' /*|| sensores.terreno[2] == 'K'*/; //Ahora podre caminar por agua sin que gaste mucha energia
 		}
 	}
 
 	//Repetimos lo mismo para las zapatillas
 	if (sensores.bateria > BATERIA_MINIMA){
 		if (zapatillas){
-			avanzo_si = avanzo_si || sensores.terreno[2] == 'B'; //Ahora podre caminar por bosque sin que gaste mucha energia
+		avanzo_si = avanzo_si || sensores.terreno[2] == 'B' /*|| sensores.terreno[2] == 'D'*/; //Ahora podre caminar por bosque sin que gaste mucha energia
 		}
 	}
 
@@ -364,33 +401,10 @@ Action ComportamientoJugador::think(Sensores sensores)
 		bien_situado=false;
 	}
 
+
+
 	int a;
 	// Mostrar el valor de los sensores
-	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
-	switch (sensores.sentido)
-	{
-		case norte:	  cout << " Norte\n";	break;
-		case noreste: cout << " Noreste\n";	break;
-		case este:    cout << " Este\n";	break;
-		case sureste: cout << " Sureste\n";	break;
-		case sur:     cout << " Sur\n";	break;
-		case suroeste:cout << " Suroeste\n";	break;
-		case oeste:   cout << " Oeste\n";	break;
-		case noroeste:cout << " Noroeste\n";	break;
-	}
-	cout << "Terreno: "; 
-	 
-
-	for (int i=0; i<sensores.terreno.size(); i++)
-		cout << sensores.terreno[i];
-
-	cout << "  Agentes: ";
-	for (int i=0; i<sensores.agentes.size(); i++)
-		cout << sensores.agentes[i];
-
-	cout << "\nColision: " << sensores.colision;
-	cout << "  Reset: " << sensores.reset;
-	cout << "  Vida: " << sensores.vida << endl<< endl;//informacion
 	
 	switch (last_action) //ultima accion
 	{
@@ -488,7 +502,14 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	if ((sensores.terreno[0] == 'G' /*or sensores.posF != -1*/) and !bien_situado){ //Orientacion
+	if (sensores.nivel == 0){
+		bien_situado = true;
+		current_state.fil = sensores.posF;
+		current_state.col = sensores.posC;
+		current_state.brujula = sensores.sentido;
+	}	
+
+	if ((sensores.terreno[0] == 'G') and !bien_situado){ //Orientacion
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
@@ -538,6 +559,31 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}*/
 	last_action=accion;
 	//cout <<accion<<endl;
+	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
+	switch (sensores.sentido)
+	{
+		case norte:	  cout << " Norte\n";	break;
+		case noreste: cout << " Noreste\n";	break;
+		case este:    cout << " Este\n";	break;
+		case sureste: cout << " Sureste\n";	break;
+		case sur:     cout << " Sur\n";	break;
+		case suroeste:cout << " Suroeste\n";	break;
+		case oeste:   cout << " Oeste\n";	break;
+		case noroeste:cout << " Noroeste\n";	break;
+	}
+	cout << "Terreno: "; 
+	 
+
+	for (int i=0; i<sensores.terreno.size(); i++)
+		cout << sensores.terreno[i];
+
+	cout << "  Agentes: ";
+	for (int i=0; i<sensores.agentes.size(); i++)
+		cout << sensores.agentes[i];
+
+	cout << "\nColision: " << sensores.colision;
+	cout << "  Reset: " << sensores.reset;
+	cout << "  Vida: " << sensores.vida << endl<< endl;//informacion
 
 	
 	return accion;
