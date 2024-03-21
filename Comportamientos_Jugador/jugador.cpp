@@ -273,6 +273,65 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 			}
 		}
 	}
+	//Buscar  una casilla para entrar y salir de una casa es decir M y T/S
+	/*if (!encontre_casilla_interes){
+			if ((sensores.terreno[9] == 'M' && sensores.terreno[11] == 'M' && (sensores.terreno[10] == 'T' || sensores.terreno[10] == 'S'))){
+				pos_casilla_a_ir = 10;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[10] == 'M' && sensores.terreno[12] == 'M' && (sensores.terreno[11] == 'T' || sensores.terreno[11] == 'S'))){
+				pos_casilla_a_ir = 11;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[11] == 'M' && sensores.terreno[13] == 'M' && (sensores.terreno[12] == 'T' || sensores.terreno[12] == 'S'))){
+				pos_casilla_a_ir = 12;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[12] == 'M' && sensores.terreno[14] == 'M' && (sensores.terreno[13] == 'T' || sensores.terreno[13] == 'S'))){
+				pos_casilla_a_ir = 13;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[13] == 'M' && sensores.terreno[15] == 'M' && (sensores.terreno[14] == 'T' || sensores.terreno[14] == 'S'))){
+				pos_casilla_a_ir = 14;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[4] == 'M' && sensores.terreno[6] == 'M' && (sensores.terreno[5] == 'T' || sensores.terreno[5] == 'S'))){
+				pos_casilla_a_ir = 5;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[5] == 'M' && sensores.terreno[7] == 'M' && (sensores.terreno[6] == 'T' || sensores.terreno[6] == 'S'))){
+				pos_casilla_a_ir = 6;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[6] == 'M' && sensores.terreno[8] == 'M' && (sensores.terreno[7] == 'T' || sensores.terreno[7] == 'S'))){
+				pos_casilla_a_ir = 7;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[1] == 'M' && sensores.terreno[3] == 'M' && (sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S'))){
+				pos_casilla_a_ir = 2;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[1] == 'M' && sensores.terreno[11] == 'M' && (sensores.terreno[5] == 'T' || sensores.terreno[5] == 'S'))){
+				pos_casilla_a_ir = 5;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[2] == 'M' && sensores.terreno[12] == 'M' && (sensores.terreno[6] == 'T' || sensores.terreno[6] == 'S'))){
+				pos_casilla_a_ir = 6;
+				encontre_casilla_a_ir = true;
+			}else if ((sensores.terreno[3] == 'M' && sensores.terreno[13] == 'M' && (sensores.terreno[7] == 'T' || sensores.terreno[7] == 'S'))){
+				pos_casilla_a_ir = 7;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[3] == 'M' && sensores.terreno[15] == 'M' && (sensores.terreno[8] == 'T' || sensores.terreno[8] == 'S'))){
+				pos_casilla_a_ir = 8;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[2] == 'M' && sensores.terreno[14] == 'M' && (sensores.terreno[7] == 'T' || sensores.terreno[7] == 'S'))){
+				pos_casilla_a_ir = 7;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[1] == 'M' && sensores.terreno[13] == 'M' && (sensores.terreno[6] == 'T' || sensores.terreno[6] == 'S'))){
+				pos_casilla_a_ir = 6;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[11] == 'M' && sensores.terreno[3] == 'M' && (sensores.terreno[6] == 'T' || sensores.terreno[6] == 'S'))){
+				pos_casilla_a_ir = 6;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[10] == 'M' && sensores.terreno[2] == 'M' && (sensores.terreno[5] == 'T' || sensores.terreno[5] == 'S'))){
+				pos_casilla_a_ir = 5;
+				encontre_casilla_interes = true;
+			}else if ((sensores.terreno[9] == 'M' && sensores.terreno[1] == 'M' && (sensores.terreno[4] == 'T' || sensores.terreno[4] == 'S'))){
+				pos_casilla_a_ir = 4;
+				encontre_casilla_interes = true;
+			}
+	}*/
+
 
 	//Si no tenemos los items de bikini o zapatillas buscar una casilla que gaste menos ya que gasta mucha energia
 	if ((!zapatillas && sensores.terreno[0] == 'B') || (!bikini && sensores.terreno[0] == 'A') && !encontre_casilla_interes) {
