@@ -21,6 +21,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 	//Por ahora la pondra solo la de componente a 0 pero pondra todas las componentes del terreno en funcion de la 
 	//orientacion del agente
 	matriz[st.fil][st.col] = terreno[0];
+	//cout << st.fil << " "<< st.col <<endl;
 
 	//aqui vamos a poner la como se llena dependiendo de la orientacion
 
@@ -111,6 +112,7 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-2][st.col+3] = terreno[13];
 			matriz[st.fil-1][st.col+3] = terreno[14];
 			matriz[st.fil][st.col+3] = terreno[15];
+			
 			break;
 		case noroeste:
 			
@@ -129,6 +131,8 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-3][st.col-2] = terreno[13];
 			matriz[st.fil-3][st.col-1] = terreno[14];
 			matriz[st.fil-3][st.col] = terreno[15];
+			
+
 			break;
 			
 			
@@ -399,10 +403,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 		zapatillas=false;
 		current_state.brujula=norte;
 		bien_situado=false;
+		current_state.fil = 99;
+		current_state.col = 99;
 	}
-
-
-
 	int a;
 	// Mostrar el valor de los sensores
 	
@@ -417,7 +420,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			break;
 
 		case noroeste:
-			current_state.col++; current_state.fil--;
+			current_state.col--; current_state.fil--;
 			break;
 
 		case este:
@@ -441,7 +444,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			break;
 
 		case noreste:
-			current_state.col--; current_state.fil--;
+			current_state.col++; current_state.fil--;
 			break;
 
 		}
@@ -501,6 +504,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		break;
 
 	}
+	//cout << current_state.brujula<<endl;
 
 	if (sensores.nivel == 0){
 		bien_situado = true;
