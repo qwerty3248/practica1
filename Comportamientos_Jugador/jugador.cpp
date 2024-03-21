@@ -16,8 +16,8 @@ inline int rotar_col(const int & fil, const int & col , float a) {
 
 
 
-void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,vector< vector<unsigned char>> &matriz){
-	
+void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,vector< vector<unsigned char>> &matriz, Sensores sensores){
+	bool nivel_3 = (sensores.nivel == 3);
 	//Por ahora la pondra solo la de componente a 0 pero pondra todas las componentes del terreno en funcion de la 
 	//orientacion del agente
 	matriz[st.fil][st.col] = terreno[0];
@@ -43,6 +43,9 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 			matriz[st.fil-3][st.col+1] = terreno[13];
 			matriz[st.fil-3][st.col+2] = terreno[14];
 			matriz[st.fil-3][st.col+3] = terreno[15];
+			if (!nivel_3){
+
+			}
 			break;
 
 		case sur:
@@ -416,35 +419,54 @@ Action ComportamientoJugador::think(Sensores sensores)
 		switch (current_state.brujula)
 		{
 		case norte:
-			current_state.fil--;
+			if (!sensores.colision){
+				current_state.fil--;
+			}
 			break;
 
 		case noroeste:
-			current_state.col--; current_state.fil--;
+			if (!sensores.colision){
+				current_state.col--; current_state.fil--;
+
+			}
 			break;
 
 		case este:
-			current_state.col++;
+			if (!sensores.colision){
+				current_state.col++;
+			}
 			break;
 
 		case sureste:
-			current_state.col++; current_state.fil++;
+			if (!sensores.colision){
+				current_state.col++; current_state.fil++;
+			}
+			
 			break;
 
 		case sur:
-			current_state.fil++;
+			if (!sensores.colision){
+				current_state.fil++;
+			}
+			
 			break;
 
 		case suroeste:
-			current_state.col--; current_state.fil++;
+			if (!sensores.colision){
+				current_state.col--; current_state.fil++;
+			}
 			break;
 
 		case oeste:
-			current_state.col--;
+			if (!sensores.colision){
+				current_state.col--;
+			}
 			break;
 
 		case noreste:
-			current_state.col++; current_state.fil--;
+			if (!sensores.colision) {
+				current_state.col++; current_state.fil--;
+			}
 			break;
 
 		}
@@ -455,35 +477,51 @@ Action ComportamientoJugador::think(Sensores sensores)
 		switch (current_state.brujula)
 		{
 		case norte:
-			current_state.fil-=2;
+			if (!sensores.colision){
+				current_state.fil-=2;
+			}
 			break;
 
 		case noroeste:
-			current_state.col+=2; current_state.fil-=2;
+			if (!sensores.colision){
+				current_state.col-=2; current_state.fil-=2;
+			}
 			break;
 
 		case este:
-			current_state.col+=2;
+			if (!sensores.colision){
+				current_state.col+=2;
+			}
 			break;
 
 		case sureste:
-			current_state.col+=2; current_state.fil+=2;
+			if (!sensores.colision){
+				current_state.col+=2; current_state.fil+=2;
+			}
 			break;
 
 		case sur:
-			current_state.fil+=2;
+			if (!sensores.colision){
+				current_state.fil+=2;
+			}
 			break;
 
 		case suroeste:
-			current_state.col-=2; current_state.fil+=2;
+			if (!sensores.colision){
+				current_state.col-=2; current_state.fil+=2;
+			}
 			break;
 
 		case oeste:
-			current_state.col-=2;
+			if (!sensores.colision){
+				current_state.col-=2;
+			}
 			break;
 
 		case noreste:
-			current_state.col-=2; current_state.fil-=2;
+			if (!sensores.colision){
+				current_state.col+=2; current_state.fil-=2;
+			}
 			break;
 
 		}
@@ -523,7 +561,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	if (bien_situado){
-		PonerTerrenoEnMatriz(sensores.terreno,current_state,mapaResultado);
+		PonerTerrenoEnMatriz(sensores.terreno,current_state,mapaResultado,sensores);
 
 	}
 	
