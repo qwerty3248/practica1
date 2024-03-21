@@ -307,7 +307,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 				encontre_casilla_interes = true;
 			}else if ((sensores.terreno[2] == 'M' && sensores.terreno[12] == 'M' && (sensores.terreno[6] == 'T' || sensores.terreno[6] == 'S'))){
 				pos_casilla_a_ir = 6;
-				encontre_casilla_a_ir = true;
+				encontre_casilla_interes = true;
 			}else if ((sensores.terreno[3] == 'M' && sensores.terreno[13] == 'M' && (sensores.terreno[7] == 'T' || sensores.terreno[7] == 'S'))){
 				pos_casilla_a_ir = 7;
 				encontre_casilla_interes = true;
