@@ -423,18 +423,19 @@ Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,
 		}
 	}
 
-	if (sensores.bateria > BATERIA_MINIMA){
+	//if (sensores.bateria > BATERIA_MINIMA){
 		if (bikini){
 			avanzo_si = avanzo_si || sensores.terreno[2] == 'A' /*|| sensores.terreno[2] == 'K'*/; //Ahora podre caminar por agua sin que gaste mucha energia
 		}
-	}
+	//}
+	
 
 	//Repetimos lo mismo para las zapatillas
-	if (sensores.bateria > BATERIA_MINIMA){
+	//if (sensores.bateria > BATERIA_MINIMA){
 		if (zapatillas){
 		avanzo_si = avanzo_si || sensores.terreno[2] == 'B' /*|| sensores.terreno[2] == 'D'*/; //Ahora podre caminar por bosque sin que gaste mucha energia
 		}
-	}
+	//}
 
 	//Ahora vamos por si entramos a una casa
 	if (numGiros > 30 ){ // si hemos girado más de 50 seguro que estamos atrapadados en una casa o en un sitio sin items lleno de agua o de bosque
