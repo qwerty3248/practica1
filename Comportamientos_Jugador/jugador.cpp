@@ -275,7 +275,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 		}
 	}
 	//Buscar  una casilla para entrar y salir de una casa es decir M y T/S
-	/*if (!encontre_casilla_interes && numGiros > 30){
+	if (!encontre_casilla_interes && numGiros > 30){
 			if ((sensores.terreno[9] == 'M' && sensores.terreno[11] == 'M' && (sensores.terreno[10] == 'T' || sensores.terreno[10] == 'S'))){
 				pos_casilla_a_ir = 10;
 				encontre_casilla_interes = true;
@@ -343,8 +343,16 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 				pos_casilla_a_ir = 2;
 				ayuda2 = false;
 				encontre_casilla_interes = true;
+			}else if (sensores.terreno[2] == 'M' && (sensores.terreno[3] == 'T' || sensores.terreno[3] == 'S')){
+				pos_casilla_a_ir = 3;
+				ayuda1 = true;
+				encontre_casilla_interes = true;
+			}else if (ayuda1){
+				pos_casilla_a_ir = 2;
+				ayuda1 = false;
+				encontre_casilla_interes = true;
 			}
-	}*/
+	}
 
 
 
