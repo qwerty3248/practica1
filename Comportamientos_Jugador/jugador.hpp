@@ -28,6 +28,16 @@ class ComportamientoJugador : public Comportamiento{
       zapatillas=false;
       numGiros = 0;
       last_action = actIDLE;
+      ayuda1 = false;
+      ayuda2 = false;
+
+      for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (i < 3 || i >= size - 3 || j < 3 || j >= size - 3) {
+                mapaResultado[i][j] = 'P';
+            }
+        }
+      }
       
       
 
@@ -52,5 +62,6 @@ class ComportamientoJugador : public Comportamiento{
   const int BATERIA_A_RECARGAR = 4500;
   const int POCOS_CICLOS = 1200;
   int numGiros;
+  bool ayuda1, ayuda2;
 };
 #endif

@@ -213,8 +213,9 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 	}*/
 
 }
-Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS){
+Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS, bool &ayuda1, bool &ayuda2, const int numGiros){
 	Action  accion = actIDLE;
+
 	//prioridades a la hora de buscar casilla  de la mas a la menos prioritaria
 	bool encontre_casilla_interes = false, peligro = false;
 	//int aleat_giro; esto no se va a usar
@@ -274,7 +275,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 		}
 	}
 	//Buscar  una casilla para entrar y salir de una casa es decir M y T/S
-	/*if (!encontre_casilla_interes){
+	/*if (!encontre_casilla_interes && numGiros > 30){
 			if ((sensores.terreno[9] == 'M' && sensores.terreno[11] == 'M' && (sensores.terreno[10] == 'T' || sensores.terreno[10] == 'S'))){
 				pos_casilla_a_ir = 10;
 				encontre_casilla_interes = true;
@@ -329,8 +330,22 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 			}else if ((sensores.terreno[9] == 'M' && sensores.terreno[1] == 'M' && (sensores.terreno[4] == 'T' || sensores.terreno[4] == 'S'))){
 				pos_casilla_a_ir = 4;
 				encontre_casilla_interes = true;
+			}else if (sensores.terreno[2] == 'M' && (sensores.terreno[1] == 'T' || sensores.terreno[1] == 'S')){
+				pos_casilla_a_ir = 1;
+				ayuda1 = true;
+				encontre_casilla_interes = true;
+			}else if (ayuda1){
+				pos_casilla_a_ir = 3;
+				ayuda1 = false;
+				ayuda2 = true;
+				encontre_casilla_interes = true;
+			}else if (ayuda2){
+				pos_casilla_a_ir = 2;
+				ayuda2 = false;
+				encontre_casilla_interes = true;
 			}
 	}*/
+
 
 
 	//Si no tenemos los items de bikini o zapatillas buscar una casilla que gaste menos ya que gasta mucha energia
@@ -366,7 +381,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 				if (girar_derecha){
 					accion = actTURN_SR;
 					girar_derecha = (rand()%2 == 0);
-				}else{
+				}else{	
 					accion = actTURN_L;
 					girar_derecha = (rand()%2 == 0);
 				}
@@ -400,7 +415,7 @@ Action BuscarCasillaInteres(Sensores sensores,const bool zapatillas,const bool b
 	return accion;
 
 }
-Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS, const int BATERIA_A_RECARGAR,int &numGiros){
+Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,const bool bien_situado, bool &girar_derecha,const int BATERIA_MINIMA,const int BATERIA_BAJA ,const int POCOS_CICLOS, const int BATERIA_A_RECARGAR,int &numGiros, bool &ayuda1, bool &ayuda2){
 	Action accion=actIDLE;
 	//Cuando voy a avanzar, puede ir cambiando si consigo items por ejemplo, el bikini o las zapatillas
 	bool avanzo_si = sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S';
@@ -411,7 +426,7 @@ Action RealizarAccion(Sensores sensores,const bool zapatillas,const bool bikini,
 		return accion; //Nos quedamos en el sitio si estamos en la x y tenemos la bateria baja o no hemos recargado lo suficiente
 	}
 	//Tenemos algun movimiento de interes ??
-	accion = BuscarCasillaInteres(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS);
+	accion = BuscarCasillaInteres(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,ayuda1,ayuda2,numGiros);
 	//cout << accion<<endl;
 	if (accion != actIDLE){
 		if (accion == actWALK){
@@ -659,7 +674,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 
 
-	accion = RealizarAccion(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,BATERIA_A_RECARGAR,numGiros);
+	accion = RealizarAccion(sensores,zapatillas,bikini,bien_situado,girar_derecha,BATERIA_MINIMA,BATERIA_BAJA,POCOS_CICLOS,BATERIA_A_RECARGAR,numGiros,ayuda1,ayuda2);
 	/*if (accion == actWALK){
 		if (numGiros >= 0){
 			numGiros--;
